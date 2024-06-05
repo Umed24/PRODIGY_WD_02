@@ -16,4 +16,63 @@
     </div>
     <script src="script.js"></script>
 </body>
+<script>
+
+    let timer;
+let startTime;
+let elapsedTime = 0;
+let isRunning = false;
+
+const display = document.getElementById('display');
+const startStopButton = document.getElementById('startStop');
+const resetButton = document.getElementById('reset');
+
+startStopButton.addEventListener('click', () => {
+    if (isRunning) {
+        stopTimer();
+    } else {
+        startTimer();
+    }
+});
+
+resetButton.addEventListener('click', resetTimer);
+
+function startTimer() {
+    startTime = Date.now() - elapsedTime;
+    timer = setInterval(updateTime, 1000);
+    startStopButton.textContent = 'Stop';
+    isRunning = true;
+}
+
+function stopTimer() {
+    clearInterval(timer);
+    elapsedTime = Date.now() - startTime;
+    startStopButton.textContent = 'Start';
+    isRunning = false;
+}
+
+function resetTimer() {
+    clearInterval(timer);
+    elapsedTime = 0;
+    display.textContent = '00:00:00';
+    startStopButton.textContent = 'Start';
+    isRunning = false;
+}
+
+function updateTime() {
+    elapsedTime = Date.now() - startTime;
+    const totalSeconds = Math.floor(elapsedTime / 1000);
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    display.textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
+
+function pad(number) {
+    return number.toString().padStart(2, '0');
+}
+
+</script>
 </html>
